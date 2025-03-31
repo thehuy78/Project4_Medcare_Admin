@@ -136,9 +136,11 @@ export default function CreateAccount() {
               navigate("/admin/account/admin")
             }
           });
+        } else {
+          console.log(rs);
+          swal("Create", rs.data.message, "error")
         }
-        console.log(rs);
-        swal("Create", rs.data.message, "error")
+
 
       }
     } catch (error) {

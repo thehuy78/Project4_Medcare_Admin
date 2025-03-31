@@ -191,6 +191,7 @@ export default function ListBooking() {
           startDate: dateRange[0].toISOString(),
           endDate: dateRange[1].toISOString(),
         }
+        setIsLoading(true)
         var rs = await apiRequestAutherize("post", "report/booking", token, f)
         console.log(rs);
         console.log(rs.data);
@@ -220,6 +221,8 @@ export default function ListBooking() {
       }
     } catch (error) {
       createNotification('error', "Export File Fails", "Export Fails")()
+    } finally {
+      setIsLoading(false)
     }
 
 
@@ -535,7 +538,7 @@ export default function ListBooking() {
                           : "none",
                       }}
                     >
-                      <p className={item.status && item.status.toLowerCase() === "active" ? "active" : "deactive"}>{item.status}</p>
+                      <p style={{ backgroundColor: item.status && item.status.toLowerCase() === "pending" ? "orange" : item.status.toLowerCase() === "cancel" ? "red" : "green" }} className={item.status && item.status.toLowerCase() === "active" ? "active" : "deactive"}>{item.status}</p>
                     </td>
                     <td>
                       <Link className='link_tag' to={`/admin/booking/detail/${item.id}`}>

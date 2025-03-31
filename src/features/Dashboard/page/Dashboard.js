@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import LoadingPage from '../../../shared/Config/LoadingPage';
-import Chart from 'chart.js/auto';
+
 import '../style/Dashboard.scss';
+import Chart from 'chart.js/auto';
 //hook
 import { useAdminContext } from '../../../shared/hook/ContextToken';
 import { apiRequestAutherize } from '../../../shared/hook/Api/ApiAuther';
@@ -12,12 +13,13 @@ import { formatNumberWithDot } from "../../../shared/function/FomatNumber"
 //json data
 import { labelData, labelSet, labelValue } from "../data/LabelChartBookingHours"
 import { labelDataAge } from "../data/LabelChartBookingByAge"
-import { labelSetDoW, labelValueDoW } from "../data/LabelChartBookingByDayOfWeek"
+import { labelValueDoW } from "../data/LabelChartBookingByDayOfWeek"
 //component
 import ChartBookingByHours from '../component/ChartBookingByHours';
 import ChartBookingByAge from '../component/ChartBookingByAge';
 import ChartBookingByDayOfWeek from '../component/ChartBookingByDayOfWeek';
 import { CaculatorPercentfn } from '../../../shared/function/CaculatorPercent';
+import { listenForNotifications } from '../../../shared/Config/firebaseConfig';
 
 
 export default function Dashboard() {
@@ -26,6 +28,16 @@ export default function Dashboard() {
   const currentDate = new Date();
 
   const [totalRevenueProfit, setTotalRevenueProfit] = useState()
+
+
+
+  const [notification, setNotification] = useState('');
+  useEffect(() => {
+    const userId = 'booking/admin';
+    listenForNotifications(userId, setNotification);
+  }, []);
+
+
   const fetchTotalRevenue = useCallback(async () => {
     try {
       if (token) {
@@ -131,9 +143,9 @@ export default function Dashboard() {
           });
           setCountBookingDoW([currentW, previousW])
           setLableCountBookingDow(label)
-          if (dayChartDow == 7) {
+          if (dayChartDow === 7) {
             setLableSetDown(["This Week", "Last Week"])
-          } else if (dayChartDow == 30) {
+          } else if (dayChartDow === 30) {
             setLableSetDown(["This Month", "Last Month"])
           }
         }
@@ -181,32 +193,35 @@ export default function Dashboard() {
   }, [token, dayChartByType])
   useEffect(() => {
     fetchCountByType()
-  }, [fetchCountByType]);
+  }, [fetchCountByType, notification]);
 
 
   useEffect(() => {
     fetchCountTopHospital()
-  }, [fetchCountTopHospital]);
+  }, [fetchCountTopHospital, notification]);
 
 
   useEffect(() => {
     fetchCountBookingByDayOffWeek()
-  }, [fetchCountBookingByDayOffWeek]);
+  }, [fetchCountBookingByDayOffWeek, notification]);
 
   useEffect(() => {
     fetchTotalGender()
-  }, [fetchTotalGender]);
+  }, [fetchTotalGender, notification]);
   useEffect(() => {
     fetchTotalRevenue()
-  }, [fetchTotalRevenue]);
+  }, [fetchTotalRevenue, notification]);
   useEffect(() => {
     fetchCountBookingByHours()
-  }, [fetchCountBookingByHours]);
+  }, [fetchCountBookingByHours, notification]);
   useEffect(() => {
     fetchCountBookingByAge()
-  }, [fetchCountBookingByAge]);
+  }, [fetchCountBookingByAge, notification]);
 
   //chart_r_3
+
+
+
 
 
   return (

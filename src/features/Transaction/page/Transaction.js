@@ -112,6 +112,7 @@ export default function Transaction() {
           startDate: dateRange[0].toISOString(),
           endDate: dateRange[1].toISOString(),
         };
+        setIsLoading(true)
         var rs = await apiRequestAutherize(
           "POST",
           "transaction/export",
@@ -146,6 +147,8 @@ export default function Transaction() {
       }
     } catch (error) {
       createNotification('error', "Export File Fails", "Export Fails")()
+    } finally {
+      setIsLoading(false)
     }
   };
 

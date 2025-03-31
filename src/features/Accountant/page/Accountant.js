@@ -5,6 +5,7 @@ import { createNotification } from "../../../shared/Config/Notifications";
 import { apiRequestAutherize } from '../../../shared/hook/Api/ApiAuther';
 
 import { formatNumberWithDot } from '../../../shared/function/FomatNumber';
+import LoadingPage from '../../../shared/Config/LoadingPage';
 export default function Accountant() {
 
   const [isLoading, setIsLoading] = useState(false);
@@ -106,6 +107,7 @@ export default function Accountant() {
           hospitalCode: hospitalCodeChoice,
           time: time
         }
+        setIsLoading(true)
         var rs = await apiRequestAutherize("post", "accountant/export", token, f)
         console.log(rs);
         console.log(rs.data);
@@ -135,12 +137,14 @@ export default function Accountant() {
       }
     } catch (error) {
       createNotification('error', "Export File Fails", "Export Fails")()
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
     <div className='accountant'>
-
+      <LoadingPage isloading={isLoading} />
       <div className='left'>
         <div className='left-top'>
           <p className='lt_title'>Overview</p>
