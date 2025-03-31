@@ -43,7 +43,7 @@ const InputMap = () => {
 
     // Tạo script để tải Google Maps API
     const script = document.createElement('script');
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDNI_ZWPqvdS6r6gPVO50I4TlYkfkZdXh8&libraries=places&callback=initMap";
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}&libraries=places&callback=initMap`;
     script.async = true;
     script.defer = true;
 
